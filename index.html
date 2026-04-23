@@ -113,6 +113,11 @@
       padding: 100px 24px 100px;
       position: relative; overflow-x: clip; overflow-y: visible;
     }
+    .hero::after {
+      content: ''; position: absolute; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);
+      top: -100px; right: -100px; pointer-events: none; z-index: 0;
+    }
     .hero-globe {
       position: absolute;
       top: 50%; left: 50%;
@@ -184,8 +189,9 @@
       padding: 16px 40px; border-radius: 100px;
       font-weight: 500; font-size: 15px;
       text-decoration: none; transition: all .3s;
-      box-shadow: 0 4px 30px rgba(0,212,180,0.25);
+      box-shadow: 0 8px 30px rgba(0,212,180,0.3), 0 4px 15px rgba(0,0,0,0.1);
       letter-spacing: .02em;
+      transform: scale(1.02);
     }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(0,212,180,0.3), 0 8px 30px rgba(139,110,61,0.15); }
     .btn-ghost {
@@ -200,6 +206,7 @@
       margin-top: 80px;
       display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
       position: relative; z-index: 2;
+      transform: scale(1.02);
     }
     .stat { text-align: center; }
     .stat strong {
@@ -209,7 +216,7 @@
     .stat span { font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-weight: 400; }
 
     /* ── SECTION COMMON ── */
-    section { padding: 110px 24px; position: relative; }
+    section { padding: 120px 24px; position: relative; }
     .container { max-width: 1100px; margin: 0 auto; }
     .section-label {
       display: inline-block;
@@ -249,6 +256,10 @@
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
       background: linear-gradient(90deg, transparent, rgba(0,212,180,0.2), rgba(139,110,61,0.15), transparent);
     }
+
+    /* ── CARD HIERARCHY ── */
+    .card-primary { transform: scale(1.02); box-shadow: 0 16px 40px rgba(0,0,0,0.15); z-index: 2; position: relative; }
+    .card-secondary { opacity: 0.92; transform: scale(0.98); }
 
     /* ── HOW ── */
     .how { background: #000; }
@@ -550,7 +561,7 @@
     .orbit-node.orbit-visible { opacity: 1; transform: scale(1); }
     .orbit-node-card {
       background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; padding: 16px 18px;
+      border-radius: 16px; padding: 18px 20px;
       backdrop-filter: blur(8px); transition: all .4s; cursor: default; text-align: left;
     }
     .orbit-node-card:hover { border-color: rgba(255,255,255,0.15); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
@@ -601,7 +612,7 @@
     .pricing-card {
       background: rgba(255,255,255,0.02);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px; padding: 36px; text-align: left;
+      border-radius: 24px; padding: 40px; text-align: left;
       backdrop-filter: blur(12px);
       position: relative; overflow: hidden;
       box-shadow: 0 0 30px rgba(0,0,0,0.2), 0 0 60px rgba(0,212,180,0.04);
@@ -780,10 +791,17 @@
       0%,100% { box-shadow: 0 0 8px rgba(139,110,61,0.3); }
       50% { box-shadow: 0 0 20px rgba(139,110,61,0.6), 0 0 40px rgba(139,110,61,0.3); }
     }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* ── ANIMATIONS ── */
-    .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.stagger-1 { transition-delay: 0.1s; }
+    .reveal.stagger-2 { transition-delay: 0.2s; }
+    .reveal.stagger-3 { transition-delay: 0.3s; }
     .stagger-1 { transition-delay: 0s; }
     .stagger-2 { transition-delay: .12s; }
     .stagger-3 { transition-delay: .24s; }
@@ -813,6 +831,14 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
+      /* Widget grid horizontal scroll on mobile */
+      .widget-row { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+      .widget-item { min-width: 90px; flex-shrink: 0; }
+      /* Mobile sticky CTA */
+      .floating-cta { bottom: 0; right: 0; left: 0; flex-direction: row; border-radius: 0; }
+      .floating-cta a { flex: 1; border-radius: 0 !important; justify-content: center; border: none !important; }
+      .floating-cta .fc-subscribe { border-radius: 0 !important; }
+      .floating-cta .fc-video { border-radius: 0 !important; }
       .why .container { grid-template-columns: 1fr; gap: 40px; }
       .features-grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; text-align: center; padding: 32px 20px; }
@@ -1247,7 +1273,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div style="display:flex;flex-direction:column;gap:32px;max-width:640px;margin:0 auto;">
       <!-- Campaign 1 -->
-      <div class="pricing-card highlight reveal stagger-1" style="display:flex;flex-direction:column;">
+      <div class="pricing-card highlight card-primary reveal stagger-1" style="display:flex;flex-direction:column;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;margin-top:8px;">
           <div style="width:40px;height:40px;border-radius:12px;background:rgba(139,110,61,0.06);border:1px solid rgba(139,110,61,0.15);display:flex;align-items:center;justify-content:center;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold2)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
